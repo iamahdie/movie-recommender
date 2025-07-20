@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}سیستم پیشنهاد فیلم{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #ffffff;
+            --text-color: #212529;
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
+            --muted-color: #6c757d;
+        }
+        [data-theme="dark"] {
+            --primary-color: #0d6efd;
+            --secondary-color: #adb5bd;
+            --background-color: #212529;
+            --text-color: #f8f9fa;
+            --card-bg: #343a40;
+            --border-color: #495057;
+            --muted-color: #adb5bd;
+        }
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .text-muted {
+            color: var(--muted-color) !important;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 0;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+        .telegram-button {
+            position: fixed;
+            top: 20px;
+            left: 95px;
+            z-index: 1000;
+            background: #0088cc;
+            border: none;
+            color: white;
+            padding: 0;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+        }
+        .telegram-button:hover {
+            transform: scale(1.1);
+            color: white;
+            text-decoration: none;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            display: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+        }
+        .back-to-top:hover {
+            transform: scale(1.1);
+            background: var(--primary-color);
+            color: white;
+        }
+        .pagination .page-link {
+            color: var(--primary-color);
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+        }
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .pagination .page-item.disabled .page-link {
+            color: var(--muted-color);
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+        }
+        
+        /* استایل‌های footer */
+        .footer-custom {
+            background: linear-gradient(135deg, var(--bg-color), var(--light-color));
+            border-top: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        
+        .footer-text {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .footer-subtext {
+            color: var(--muted-color);
+        }
+        
+        .heart-icon {
+            color: #e25555;
+            font-size: 1.2em;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- دکمه تغییر حالت تاریک -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="تغییر حالت تاریک">
+        <i class="fas fa-moon" id="dark-icon"></i>
+    </button>
+
+    <!-- دکمه تلگرام -->
+    <a href="https://t.me/MovieRecommender1bot" class="telegram-button" title="تلگرام" target="_blank">
+        <i class="fab fa-telegram-plane"></i>
+    </a>
+
+    <!-- دکمه بازگشت به بالا -->
+    <button class="back-to-top" id="back-to-top" title="بازگشت به بالا">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">
+                <i class="fas fa-film me-2"></i>
+                سیستم پیشنهاد فیلم
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">
+                            <i class="fas fa-home me-1"></i>
+                            صفحه اصلی
+                        </a>
+                    </li>
+                </ul>
+                <form class="d-flex" action="{{ url_for('search') }}" method="get">
+                    <input class="form-control me-2" type="search" name="q" placeholder="جستجوی فیلم..." aria-label="جستجو">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer-custom py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0 footer-text">
+                ساخته شده توسط iaMeisam با عشق <span class="heart-icon">♥️</span> برای دوستداران هنر
+            </p>
+            <small class="footer-subtext">
+                تمام اطلاعات از TMDB دریافت می‌شود
+            </small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // بررسی حالت تاریک از localStorage
+        const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+        
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateDarkModeIcon(currentTheme === 'dark');
+        }
+
+        function toggleDarkMode() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateDarkModeIcon(newTheme === 'dark');
+        }
+
+        function updateDarkModeIcon(isDark) {
+            const icon = document.getElementById('dark-icon');
+            if (isDark) {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        // دکمه بازگشت به بالا
+        const backToTopButton = document.getElementById('back-to-top');
+
+        // نمایش/مخفی کردن دکمه بر اساس اسکرول
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = 'flex';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        // کلیک روی دکمه بازگشت به بالا
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html> 

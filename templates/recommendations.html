@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}پیشنهادات فیلم{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">پیشنهادات شما</h1>
+        <p class="lead">بر اساس ترجیحات شما، این محتواها را پیشنهاد می‌کنیم</p>
+    </div>
+
+    <div id="movies-container" class="row">
+        {% for movie in movies %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 hover-card">
+                {% if movie.poster_path %}
+                <a href="{% if movie.title %}{{ url_for('movie_details', movie_id=movie.id) }}{% else %}{{ url_for('tv_details', tv_id=movie.id) }}{% endif %}" class="text-decoration-none">
+                    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" alt="{{ movie.title or movie.name }}">
+                </a>
+                {% else %}
+                <div class="card-img-top bg-secondary text-white text-center p-5">بدون تصویر</div>
+                {% endif %}
+                <div class="card-body">
+                    <a href="{% if movie.title %}{{ url_for('movie_details', movie_id=movie.id) }}{% else %}{{ url_for('tv_details', tv_id=movie.id) }}{% endif %}" class="text-decoration-none">
+                        <h5 class="card-title">{{ movie.title or movie.name }}</h5>
+                    </a>
+                    {% if movie.overview_fa %}
+                    <p class="card-text">{{ movie.overview_fa[:100] }}...</p>
+                    {% elif movie.overview %}
+                    <p class="card-text">{{ movie.overview[:100] }}...</p>
+                    {% endif %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-primary">{{ movie.vote_average }}/10</span>
+                        <small class="text-muted">
+                            {% if movie.release_date %}
+                                {{ movie.release_date[:4] }}
+                            {% elif movie.first_air_date %}
+                                {{ movie.first_air_date[:4] }}
+                            {% endif %}
+                            {% if movie.runtime %}
+                                • {{ movie.runtime }} دقیقه
+                            {% endif %}
+                        </small>
+                    </div>
+                    {% if movie.genre_ids %}
+                    <div class="mb-2">
+                        {% for genre_id in movie.genre_ids[:2] %}
+                            {% if genre_id == 18 %}
+                                <span class="badge bg-secondary me-1">درام</span>
+                            {% elif genre_id == 28 %}
+                                <span class="badge bg-secondary me-1">اکشن</span>
+                            {% elif genre_id == 35 %}
+                                <span class="badge bg-secondary me-1">کمدی</span>
+                            {% elif genre_id == 878 %}
+                                <span class="badge bg-secondary me-1">علمی‌تخیلی</span>
+                            {% elif genre_id == 27 %}
+                                <span class="badge bg-secondary me-1">ترسناک</span>
+                            {% elif genre_id == 10749 %}
+                                <span class="badge bg-secondary me-1">عاشقانه</span>
+                            {% elif genre_id == 80 %}
+                                <span class="badge bg-secondary me-1">جنایی</span>
+                            {% elif genre_id == 16 %}
+                                <span class="badge bg-secondary me-1">انیمیشن</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if total_pages > 1 %}
+    <div class="text-center mt-5">
+        <nav aria-label="صفحه‌بندی">
+            <ul class="pagination justify-content-center">
+                <!-- دکمه صفحه اول -->
+                {% if current_page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('get_recommendations', content_type=content_type, genre_id=genre_id, year=year, min_rating=min_rating, page=1) }}" aria-label="صفحه اول">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+                
+                <!-- دکمه قبلی -->
+                {% if current_page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('get_recommendations', content_type=content_type, genre_id=genre_id, year=year, min_rating=min_rating, page=current_page-1) }}" aria-label="قبلی">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+                
+                <!-- شماره صفحات -->
+                {% set start_page = [1, current_page-2] | max %}
+                {% set end_page = [total_pages, current_page+2] | min %}
+                
+                <!-- نمایش نقطه‌چین اگر صفحه اول نباشد -->
+                {% if start_page > 1 %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                {% endif %}
+                
+                {% for page_num in range(start_page, end_page + 1) %}
+                <li class="page-item {% if page_num == current_page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('get_recommendations', content_type=content_type, genre_id=genre_id, year=year, min_rating=min_rating, page=page_num) }}">{{ page_num }}</a>
+                </li>
+                {% endfor %}
+                
+                <!-- نمایش نقطه‌چین اگر صفحه آخر نباشد -->
+                {% if end_page < total_pages %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                {% endif %}
+                
+                <!-- دکمه بعدی -->
+                {% if current_page < total_pages %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('get_recommendations', content_type=content_type, genre_id=genre_id, year=year, min_rating=min_rating, page=current_page+1) }}" aria-label="بعدی">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+                
+                <!-- دکمه صفحه آخر -->
+                {% if current_page < total_pages %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('get_recommendations', content_type=content_type, genre_id=genre_id, year=year, min_rating=min_rating, page=total_pages) }}" aria-label="صفحه آخر">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+        <!-- اطلاعات صفحه -->
+        <div class="mt-3">
+            <small class="text-muted">
+                صفحه {{ current_page }} از {{ total_pages }} | 
+                نمایش {{ movies|length }} محتوا از {{ total_pages * 12 }} محتوا
+            </small>
+            {% if total_pages > 1 %}
+            <div class="mt-2">
+                <small class="text-muted">
+                    برای مشاهده محتوای بیشتر، از دکمه‌های صفحه‌بندی استفاده کنید
+                </small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-5">
+        <a href="{{ url_for('home') }}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>
+            بازگشت به سوالات
+        </a>
+    </div>
+</div>
+{% endblock %} 

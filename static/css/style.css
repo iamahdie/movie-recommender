@@ -1,0 +1,392 @@
+/* متغیرهای رنگی */
+:root {
+    /* لایت مود */
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --bg-color: #ffffff;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --border-color: rgba(0,0,0,0.1);
+    --hover-bg: rgba(0,0,0,0.05);
+    --input-bg: #ffffff;
+    --input-text: #212529;
+    --input-border: rgba(0,0,0,0.1);
+    --muted-text: #6c757d;
+    --card-text: #212529;
+}
+
+[data-theme="dark"] {
+    --primary-color: #0d6efd;
+    --secondary-color: #adb5bd;
+    --light-color: #212529;
+    --dark-color: #f8f9fa;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --bg-color: #121212;
+    --text-color: #f8f9fa;
+    --card-bg: #1e1e1e;
+    --border-color: rgba(255,255,255,0.1);
+    --hover-bg: rgba(255,255,255,0.05);
+    --input-bg: #1e1e1e;
+    --input-text: #f8f9fa;
+    --input-border: rgba(255,255,255,0.1);
+    --muted-text: #adb5bd;
+    --card-text: #e9ecef;
+}
+
+/* استایل‌های عمومی */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: 'Vazirmatn', sans-serif;
+}
+
+/* استایل‌های کارت‌ها */
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    background-color: var(--card-bg);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.card-img-top {
+    object-fit: cover;
+    height: 400px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* استایل‌های دکمه‌ها */
+.btn {
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-transform: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), #0b5ed7);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+/* استایل‌های نوار ناوبری */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-color), #0b5ed7);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: rgba(255,255,255,0.9) !important;
+}
+
+/* استایل‌های فوتر */
+footer {
+    background: linear-gradient(135deg, var(--bg-color), var(--light-color));
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+    color: var(--text-color);
+}
+
+.footer-custom {
+    background: linear-gradient(135deg, var(--bg-color), var(--light-color));
+    border-top: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.footer-text {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.footer-subtext {
+    color: var(--muted-text);
+}
+
+.heart-icon {
+    color: #e25555;
+    font-size: 1.2em;
+    animation: heartbeat 2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* استایل‌های متن */
+.text-justify {
+    text-align: justify;
+    text-justify: inter-word;
+    line-height: 1.8;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.lead {
+    color: var(--muted-text);
+    font-weight: 400;
+}
+
+/* استایل‌های متن‌های توضیحات */
+.card-text {
+    color: var(--card-text);
+}
+
+.text-muted {
+    color: var(--muted-text) !important;
+}
+
+/* استایل‌های آیکون‌ها */
+.fas {
+    margin-left: 0.5rem;
+}
+
+/* استایل‌های بج‌ها */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border-radius: 6px;
+}
+
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--primary-color), #0b5ed7) !important;
+}
+
+/* استایل‌های تصاویر */
+.img-fluid {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.img-fluid:hover {
+    transform: scale(1.02);
+}
+
+/* استایل‌های فرم */
+.form-control {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-control::placeholder {
+    color: var(--muted-text);
+}
+
+/* استایل‌های چک باکس و رادیو */
+.form-check-input {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    color: var(--text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.form-check-input:checked + .form-check-label {
+    color: var(--primary-color);
+}
+
+/* استایل‌های رسپانسیو */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .card {
+        margin-bottom: 20px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+.container {
+    max-width: 1200px;
+}
+
+.max-width-800 {
+    max-width: 800px;
+}
+
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.card-title {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* استایل‌های دکمه تغییر حالت */
+.theme-switch {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.theme-switch-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-size: 1.2rem;
+}
+
+.theme-switch-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    background: var(--hover-bg);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.theme-switch-btn i {
+    transition: transform 0.3s ease;
+}
+
+.theme-switch-btn:hover i {
+    transform: scale(1.2);
+}
+
+/* استایل‌های دکمه تلگرام */
+.telegram-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.telegram-btn a {
+    background: linear-gradient(135deg, #0088cc, #0077b3);
+    border: none;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.telegram-btn a:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #0077b3, #006699);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: white;
+}
+
+.telegram-btn a:hover i {
+    transform: scale(1.2);
+}
+
+.telegram-btn i {
+    transition: transform 0.3s ease;
+}
+
+/* استایل‌های رسپانسیو برای دکمه‌ها */
+@media (max-width: 768px) {
+    .theme-switch {
+        top: 10px;
+        left: 10px;
+    }
+    
+    .telegram-btn {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .theme-switch-btn,
+    .telegram-btn a {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+} 

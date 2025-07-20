@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}سوالات پیشنهاد فیلم{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary mb-3">سیستم پیشنهاد فیلم</h1>
+        <p class="lead">به سوالات زیر پاسخ دهید تا فیلم‌های مناسب را به شما پیشنهاد کنیم</p>
+        </div>
+
+        <form action="{{ url_for('get_recommendations') }}" method="post" class="max-width-800 mx-auto">
+        <div class="card shadow-sm mb-4 hover-card">
+            <div class="card-body p-4">
+                <h3 class="card-title text-primary mb-4">
+                    <i class="fas fa-tv me-2"></i>
+                    1. دنبال چه نوع محتوایی هستید؟
+                </h3>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="content_type" id="movie" value="movie" required>
+                    <label class="form-check-label fs-5" for="movie">🎬 فیلم</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="content_type" id="series" value="series">
+                    <label class="form-check-label fs-5" for="series">📺 سریال</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="content_type" id="anime" value="anime">
+                    <label class="form-check-label fs-5" for="anime">🇯🇵 انیمه</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="content_type" id="animation" value="animation">
+                    <label class="form-check-label fs-5" for="animation">🎨 انیمیشن</label>
+                </div>
+            </div>
+        </div>
+
+            <div class="card shadow-sm mb-4 hover-card">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-4">
+                        <i class="fas fa-film me-2"></i>
+                    2. چه نوع ژانری را ترجیح می‌دهید؟
+                    </h3>
+                    <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="genre" id="drama" value="18" required>
+                    <label class="form-check-label fs-5" for="drama">🎭 درام</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="genre" id="action" value="28">
+                    <label class="form-check-label fs-5" for="action">💥 اکشن</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="genre" id="comedy" value="35">
+                    <label class="form-check-label fs-5" for="comedy">😁 کمدی</label>
+                    </div>
+                    <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="genre" id="scifi" value="878">
+                    <label class="form-check-label fs-5" for="scifi">🚀 علمی‌تخیلی</label>
+                    </div>
+                <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="genre" id="horror" value="27">
+                        <label class="form-check-label fs-5" for="horror">👻 ترسناک</label>
+                    </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="genre" id="romance" value="10749">
+                    <label class="form-check-label fs-5" for="romance">💕 عاشقانه</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="genre" id="crime" value="80">
+                    <label class="form-check-label fs-5" for="crime">🕵️ جنایی</label>
+                </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4 hover-card">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-4">
+                        <i class="fas fa-clock me-2"></i>
+                    3. چه دوره زمانی را ترجیح می‌دهید؟
+                    </h3>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="year" id="recent" value="2020" required>
+                        <label class="form-check-label fs-5" for="recent">🆕 جدید (2020 به بعد)</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="year" id="modern" value="2010">
+                        <label class="form-check-label fs-5" for="modern">📱 مدرن (2010 تا 2020)</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="year" id="classic" value="2000">
+                        <label class="form-check-label fs-5" for="classic">⭐ کلاسیک (2000 تا 2010)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="year" id="old" value="1990">
+                        <label class="form-check-label fs-5" for="old">🎞️ قدیمی (قبل از 2000)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4 hover-card">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-4">
+                        <i class="fas fa-star me-2"></i>
+                    4. چه سطح از امتیاز را ترجیح می‌دهید؟
+                    </h3>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="rating" id="high" value="8" required>
+                        <label class="form-check-label fs-5" for="high">⭐⭐⭐⭐⭐ بالا (8 به بالا)</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="rating" id="medium" value="6">
+                        <label class="form-check-label fs-5" for="medium">⭐⭐⭐ متوسط (6-8)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="rating" id="low" value="4">
+                        <label class="form-check-label fs-5" for="low">⭐⭐ پایین (4-6)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
+                    <i class="fas fa-film me-2"></i>
+                    دریافت پیشنهادها
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %} 

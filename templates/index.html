@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}جستجوی فیلم{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary mb-3">جستجوی فیلم</h1>
+                <p class="lead">نام فیلم یا سریال مورد نظر خود را جستجو کنید</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ url_for('search') }}" method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-lg" name="q" placeholder="نام فیلم یا سریال..." required>
+                            <button class="btn btn-primary btn-lg" type="submit">
+                                <i class="fas fa-search"></i>
+                                جستجو
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('home') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    بازگشت به سوالات
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

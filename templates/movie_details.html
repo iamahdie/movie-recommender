@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4">
+            {% if movie.poster_path %}
+            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="img-fluid rounded shadow" alt="{{ movie.title }}">
+            {% else %}
+            <div class="bg-secondary text-white text-center p-5 rounded">بدون تصویر</div>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold text-primary mb-3">{{ movie.title }}</h1>
+            
+            <div class="mb-4">
+                <span class="badge bg-primary fs-6 me-2">{{ movie.vote_average }}/10</span>
+                <span class="badge bg-secondary fs-6 me-2">
+                    {% if movie.release_date %}
+                        {{ movie.release_date[:4] }}
+                    {% endif %}
+                </span>
+                {% if movie.runtime %}
+                <span class="badge bg-info fs-6 me-2">{{ movie.runtime }} دقیقه</span>
+                {% endif %}
+            </div>
+            
+            {% if movie.genres %}
+            <div class="mb-4">
+                {% for genre in movie.genres %}
+                <span class="badge bg-outline-secondary me-2">{{ genre.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if movie.overview_fa %}
+            <p class="lead mb-4">{{ movie.overview_fa }}</p>
+            {% elif movie.overview %}
+            <p class="lead mb-4">{{ movie.overview }}</p>
+            {% endif %}
+            
+            {% if movie.director %}
+            <div class="mb-4">
+                <h5 class="mb-3">کارگردان</h5>
+                <div class="d-flex align-items-center">
+                    {% if movie.director.profile_path %}
+                    <img src="https://image.tmdb.org/t/p/w92{{ movie.director.profile_path }}" 
+                         class="rounded-circle me-3" 
+                         alt="{{ movie.director.name }}"
+                         style="width: 60px; height: 60px; object-fit: cover;">
+                    {% else %}
+                    <div class="rounded-circle bg-secondary me-3" 
+                         style="width: 60px; height: 60px;"></div>
+                    {% endif %}
+                    <div>
+                        <a href="{{ url_for('person_movies', person_id=movie.director.id, person_type='director') }}" class="text-decoration-none">
+                            <h6 class="mb-0">{{ movie.director.name }}</h6>
+                        </a>
+                        <small class="text-muted">کارگردان</small>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if movie.main_cast %}
+            <div class="mb-4">
+                <h5 class="mb-3">بازیگران اصلی</h5>
+                <div class="row">
+                    {% for actor in movie.main_cast %}
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            {% if actor.profile_path %}
+                            <img src="https://image.tmdb.org/t/p/w92{{ actor.profile_path }}" 
+                                 class="rounded-circle me-3" 
+                                 alt="{{ actor.name }}"
+                                 style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                            <div class="rounded-circle bg-secondary me-3" 
+                                 style="width: 50px; height: 50px;"></div>
+                            {% endif %}
+                            <div>
+                                <a href="{{ url_for('person_movies', person_id=actor.id, person_type='actor') }}" class="text-decoration-none">
+                                    <h6 class="mb-0">{{ actor.name }}</h6>
+                                </a>
+                                {% if actor.character %}
+                                <small class="text-muted">{{ actor.character }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if movie.budget and movie.budget > 0 %}
+            <div class="mb-3">
+                <strong>بودجه:</strong> ${{ "{:,}".format(movie.budget) }}
+            </div>
+            {% endif %}
+            
+            {% if movie.revenue and movie.revenue > 0 %}
+            <div class="mb-3">
+                <strong>درآمد:</strong> ${{ "{:,}".format(movie.revenue) }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if similar_movies %}
+    <div class="mt-5">
+        <h3 class="mb-4">فیلم‌های مشابه</h3>
+        <div class="row">
+            {% for similar in similar_movies[:6] %}
+            <div class="col-md-2 mb-3">
+                <div class="card h-100 hover-card">
+                    {% if similar.poster_path %}
+                    <a href="{{ url_for('movie_details', movie_id=similar.id) }}" class="text-decoration-none">
+                        <img src="https://image.tmdb.org/t/p/w200{{ similar.poster_path }}" class="card-img-top" alt="{{ similar.title }}">
+                    </a>
+                    {% else %}
+                    <div class="card-img-top bg-secondary text-white text-center p-3">بدون تصویر</div>
+                    {% endif %}
+                    <div class="card-body p-2">
+                        <a href="{{ url_for('movie_details', movie_id=similar.id) }}" class="text-decoration-none">
+                            <h6 class="card-title small">{{ similar.title }}</h6>
+                        </a>
+                        <small class="text-muted">{{ similar.vote_average }}/10</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="text-center mt-5">
+        <a href="{{ url_for('home') }}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>
+            بازگشت به سوالات
+        </a>
+    </div>
+</div>
+{% endblock %} 

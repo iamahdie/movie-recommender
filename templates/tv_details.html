@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tv.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4">
+            {% if tv.poster_path %}
+            <img src="https://image.tmdb.org/t/p/w500{{ tv.poster_path }}" class="img-fluid rounded shadow" alt="{{ tv.name }}">
+            {% else %}
+            <div class="bg-secondary text-white text-center p-5 rounded">بدون تصویر</div>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold text-primary mb-3">{{ tv.name }}</h1>
+            
+            <div class="mb-4">
+                <span class="badge bg-primary fs-6 me-2">{{ tv.vote_average }}/10</span>
+                <span class="badge bg-secondary fs-6 me-2">
+                    {% if tv.first_air_date %}
+                        {{ tv.first_air_date[:4] }}
+                    {% endif %}
+                </span>
+                {% if tv.episode_run_time %}
+                <span class="badge bg-info fs-6 me-2">{{ tv.episode_run_time[0] }} دقیقه</span>
+                {% endif %}
+                {% if tv.number_of_seasons %}
+                <span class="badge bg-success fs-6 me-2">{{ tv.number_of_seasons }} فصل</span>
+                {% endif %}
+            </div>
+            
+            {% if tv.genres %}
+            <div class="mb-4">
+                {% for genre in tv.genres %}
+                <span class="badge bg-outline-secondary me-2">{{ genre.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if tv.overview_fa %}
+            <p class="lead mb-4">{{ tv.overview_fa }}</p>
+            {% elif tv.overview %}
+            <p class="lead mb-4">{{ tv.overview }}</p>
+            {% endif %}
+            
+            {% if tv.creator %}
+            <div class="mb-4">
+                <h5 class="mb-3">سازنده</h5>
+                <div class="d-flex align-items-center">
+                    {% if tv.creator.profile_path %}
+                    <img src="https://image.tmdb.org/t/p/w92{{ tv.creator.profile_path }}" 
+                         class="rounded-circle me-3" 
+                         alt="{{ tv.creator.name }}"
+                         style="width: 60px; height: 60px; object-fit: cover;">
+                    {% else %}
+                    <div class="rounded-circle bg-secondary me-3" 
+                         style="width: 60px; height: 60px;"></div>
+                    {% endif %}
+                    <div>
+                        <a href="{{ url_for('person_movies', person_id=tv.creator.id, person_type='creator') }}" class="text-decoration-none">
+                            <h6 class="mb-0">{{ tv.creator.name }}</h6>
+                        </a>
+                        <small class="text-muted">سازنده</small>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if tv.main_cast %}
+            <div class="mb-4">
+                <h5 class="mb-3">بازیگران اصلی</h5>
+                <div class="row">
+                    {% for actor in tv.main_cast %}
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            {% if actor.profile_path %}
+                            <img src="https://image.tmdb.org/t/p/w92{{ actor.profile_path }}" 
+                                 class="rounded-circle me-3" 
+                                 alt="{{ actor.name }}"
+                                 style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                            <div class="rounded-circle bg-secondary me-3" 
+                                 style="width: 50px; height: 50px;"></div>
+                            {% endif %}
+                            <div>
+                                <a href="{{ url_for('person_movies', person_id=actor.id, person_type='actor') }}" class="text-decoration-none">
+                                    <h6 class="mb-0">{{ actor.name }}</h6>
+                                </a>
+                                {% if actor.character %}
+                                <small class="text-muted">{{ actor.character }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if tv.status %}
+            <div class="mb-3">
+                <strong>وضعیت:</strong> {{ tv.status }}
+            </div>
+            {% endif %}
+            
+            {% if tv.networks %}
+            <div class="mb-3">
+                <strong>شبکه:</strong>
+                {% for network in tv.networks %}
+                <span class="me-2">{{ network.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if similar_tv %}
+    <div class="mt-5">
+        <h3 class="mb-4">سریال‌های مشابه</h3>
+        <div class="row">
+            {% for similar in similar_tv[:6] %}
+            <div class="col-md-2 mb-3">
+                <div class="card h-100 hover-card">
+                    {% if similar.poster_path %}
+                    <a href="{{ url_for('tv_details', tv_id=similar.id) }}" class="text-decoration-none">
+                        <img src="https://image.tmdb.org/t/p/w200{{ similar.poster_path }}" class="card-img-top" alt="{{ similar.name }}">
+                    </a>
+                    {% else %}
+                    <div class="card-img-top bg-secondary text-white text-center p-3">بدون تصویر</div>
+                    {% endif %}
+                    <div class="card-body p-2">
+                        <a href="{{ url_for('tv_details', tv_id=similar.id) }}" class="text-decoration-none">
+                            <h6 class="card-title small">{{ similar.name }}</h6>
+                        </a>
+                        <small class="text-muted">{{ similar.vote_average }}/10</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="text-center mt-5">
+        <a href="{{ url_for('home') }}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>
+            بازگشت به سوالات
+        </a>
+    </div>
+</div>
+{% endblock %} 
